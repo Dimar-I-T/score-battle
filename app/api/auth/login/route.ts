@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
             throw Error('no secret key');
         }
 
-        const token = jwt.sign(payload, secret, {
+        const token = jwt.sign(payload, "", {
             expiresIn: "24h",
             algorithm: 'none'
         });

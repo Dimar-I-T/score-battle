@@ -5,7 +5,6 @@ export async function POST(req: NextRequest) {
     try {
         const {username, password} = await req.json();
         const result = await registerService({username, password});
-        console.log("nyampe register controller")
         return NextResponse.json({
             success: true,
             message: "Successfully registered",

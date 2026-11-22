@@ -14,8 +14,6 @@ export async function getAuth(): Promise<JWTPayload | null> {
     try {
         const payload = decodeJwt(token);
 
-        console.log(JSON.stringify(payload));
-
         await pool.query(
             `update users
             set last_seen_at = now()
