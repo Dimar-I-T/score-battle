@@ -20,17 +20,13 @@ export default function useSession(): SessionState {
     }
 
     setToken(tokenFromLocal);
-    alert("token: " + tokenFromLocal);
 
     const fetchUser = async () => {
       try {
         const response = await fetch('/api/auth/me', {
           method: 'GET',
           credentials: 'include',
-          headers: {
-            Authorization: `Bearer ${tokenFromLocal}`,
-            'Content-Type': 'application/json',
-          },
+          cache: 'no-store',
         });
 
         if (response.status === 401) {
