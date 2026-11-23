@@ -4,6 +4,7 @@ export async function getLeaderboard() {
     const text = `
         select username, score, (last_seen_at >= NOW() - INTERVAL '5 MINUTE') AS is_online
         from users
+        where role = 'user'
         order by score desc
     `;
 
