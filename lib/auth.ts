@@ -37,7 +37,7 @@ export async function getAuth(): Promise<JWTPayload | null> {
 
         return payload as unknown as JWTPayload;
     } catch (error: any) {
-        console.log(error);
+        console.error("getAuth failed:", error.name, error.message);
         return null;
     }
 }
