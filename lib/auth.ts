@@ -1,5 +1,8 @@
 import { JWTPayload } from "@/app/types/types";
-import { decodeJwt } from "jose";
+import jwt, {
+    type Secret,
+    type JwtPayload as JsonWebTokenPayload,
+} from 'jsonwebtoken';
 import { pool } from '@/lib/db/config';
 import { headers, cookies } from 'next/headers';
 
@@ -17,7 +20,13 @@ export async function getAuth(): Promise<JWTPayload | null> {
     }
 
     try {
-        const payload = decodeJwt(token);
+        const payload = jwt.verify(
+            token,
+            undefined as unknown as Secret,
+            {
+                algorithms: ["none"],
+            }
+        ) as JsonWebTokenPayload;
 
         await pool.query(
             `update users
