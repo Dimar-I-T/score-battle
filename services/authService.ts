@@ -25,6 +25,10 @@ export async function loginService({ username, password }: AuthType) {
         throw Error('username doesn\'t exist');
     }
 
+    if (user.rows[0].role != 'user') {
+        throw Error('username doesn\'t exist');
+    }
+
     const hashed = user.rows[0].password;
     const benar = await bcrypt.compare(password, hashed);
     if (!benar) {
@@ -39,15 +43,47 @@ export async function loginService({ username, password }: AuthType) {
     const { password: _, ...userData } = user.rows[0];
     const payload: JWTPayload = {
         username: userData.username,
+        role: userData.role
     }
 
     return payload;
 }
 
+
+export async function adminLoginService({username, password}: AuthType) {
+    const user = await pool.query(
+        `SELECT * FROM users WHERE username = $1`,
+        [username]
+    );
+
+    if (user.rows.length === 0) {
+        throw Error("username doesn't exist");
+    }
+
+    if (user.rows[0].role !== 'admin') {
+        throw Error('account is not an admin');
+    }
+
+    const hashed = user.rows[0].password;
+    const benar = await bcrypt.compare(password, hashed);
+
+    if (!benar) {
+        throw Error('incorrect password!');
+    }
+
+    const { password: _, ...userData } = user.rows[0];
+
+    return {
+        username: userData.username,
+        role: userData.role
+    };
+}
+
+
 export async function getUserData(username : string) {
     try {
         const result = await pool.query(`
-                select username, score, last_seen_at
+                select username, role, score, last_seen_at
                 from users
                 where username = $1
             `, [username]);
