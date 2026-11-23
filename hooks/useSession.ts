@@ -20,6 +20,7 @@ export default function useSession(): SessionState {
     }
 
     setToken(tokenFromLocal);
+    alert("token: " + token);
 
     const fetchUser = async () => {
       try {
