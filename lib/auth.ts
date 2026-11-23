@@ -1,11 +1,16 @@
 import { JWTPayload } from "@/app/types/types";
 import { decodeJwt } from "jose";
-import { cookies } from "next/headers";
 import { pool } from '@/lib/db/config';
+import { headers, cookies } from 'next/headers';
 
 export async function getAuth(): Promise<JWTPayload | null> {
-    const cookie = await cookies();
-    const token = cookie.get('token')?.value;
+    const headerStore = await headers();
+    const authHeader = headerStore.get('authorization');
+    const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
+
+    const cookieStore = await cookies();
+
+    const token = bearerToken ?? cookieStore.get('token')?.value;
 
     if (!token) {
         throw Error('Unauthorized! You must login');

@@ -39,7 +39,7 @@ export default function LoginPage() {
             }
 
             const { token, username: user } = data.data;
-            localStorage.setItem('user', user);
+            localStorage.setItem('user', JSON.stringify({ username: user }));
             localStorage.setItem('token', token);
             window.dispatchEvent(new Event('auth-change'));
             showToast('Successfully logged in!', 'success');

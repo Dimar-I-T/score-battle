@@ -23,11 +23,12 @@ export default function useSession(): SessionState {
 
     const fetchUser = async () => {
       try {
-        const response = await fetch(`/api/auth/me`, {
-          method: "GET",
+        const response = await fetch('/api/auth/me', {
+          method: 'GET',
+          credentials: 'include',
           headers: {
             Authorization: `Bearer ${tokenFromLocal}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         });
 
