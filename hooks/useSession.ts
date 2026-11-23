@@ -33,11 +33,22 @@ export default function useSession(): SessionState {
           },
         });
 
-        if (response.status === 401 || response.status === 403) {
+        if (response.status === 401) {
           localStorage.removeItem("token");
           localStorage.removeItem("user");
+
           alert("Session has expired, please login.");
           router.push("/auth/login");
+          return;
+        }
+
+        if (response.status === 403) {
+          const errorBody = await response.text();
+
+          console.error("Request blocked (403):", errorBody);
+
+          alert("Access forbidden or request blocked by server.");
+
           return;
         }
 
